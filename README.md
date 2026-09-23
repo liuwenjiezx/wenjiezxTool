@@ -1,6 +1,6 @@
 # wenjiezxTool — 个人 ComfyUI 功能工具箱（中文友好）
 
-> 自研 ComfyUI 自定义节点插件 · 全中文参数 · 共 11 个节点
+> ComfyUI 自定义节点插件 · 全中文参数 · 共 11 个节点
 > 适配 Qwen-Image-2.1 文生图片编辑二合一工作流 · Windows 版 ComfyUI（Python 3.12 / 3.13）
 
 ## 功能亮点
