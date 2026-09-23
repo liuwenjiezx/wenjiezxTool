@@ -1,7 +1,8 @@
 # wenjiezxTool — 个人 ComfyUI 功能工具箱（中文友好）
 
 > 自研 ComfyUI 自定义节点插件 · 全中文参数 · 闭源发布（.pyd）  
-> 分类：`wenjiezx工具` · 共 11 个节点 · 适配 Qwen-Image-2.1 二合一工作流
+> 分类：`wenjiezx工具` · 共 11 个节点 · 适配 Qwen-Image-2.1 二合一工作流  
+> 兼容：Windows 版 ComfyUI（**Python 3.12 / 3.13 自动适配**，无需手动选择）
 
 ---
 
@@ -34,10 +35,13 @@
 
 ```
 ComfyUI\custom_nodes\wenjiezxTool\
-    ├── nodes.pyd
-    ├── __init__.py
+    ├── nodes_cp312.pyd   # Python 3.12 版（自动选择）
+    ├── nodes_cp313.pyd   # Python 3.13 版（自动选择）
+    ├── __init__.py       # 入口（按 Python 版本自动加载对应文件）
     └── web\
 ```
+
+> 插件会自动识别你的 ComfyUI 内置 Python 版本（3.12 或 3.13），无需手动选择文件。最新版 Windows 便携版（Python 3.13）与旧版（Python 3.12）均可直接使用。
 
 1. 重启 ComfyUI（或刷新浏览器）
 2. 节点搜索框输入 `wenjiezx` 即可找到全部节点
@@ -58,6 +62,7 @@ ComfyUI\custom_nodes\wenjiezxTool\
 
 ## 版本记录
 
+- **v3.1.1（2026-09-23）**：双版本兼容发布（Python 3.12 + 3.13 自动适配），最新版 Windows ComfyUI 开箱即用
 - **v3.1（2026-09-23）**：三合一节点人话下拉；新增「编辑分辨率」输出，编辑模式出图大小可调；修正 Qwen-Image-2.1 latent（16 通道/16x）
 - **v3.0**：新增三合一节点（合并模式切换+分辨率+空Latent）
 - **v2.x**：新增残差缓存加速器；闭源 .pyd 发布落地
