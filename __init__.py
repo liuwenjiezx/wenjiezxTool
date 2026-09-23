@@ -2,12 +2,24 @@
 """
 wenjiezxTool —— 个人功能工具箱（ComfyUI 自定义节点插件）
 
-用途：把日常好用的小功能节点集中放在一个插件里，后续新增节点只需在
-本目录的 nodes.py 中新增类并在 NODE_CLASS_MAPPINGS 注册即可。
-
-前端扩展：web/ 目录下的 js 由 ComfyUI 自动挂载（画布大字标注等 UI 节点）。
+多版本兼容加载：根据运行环境的 Python 版本自动选择对应的闭源 .pyd
+    - Python 3.12 -> nodes_cp312.pyd
+    - Python 3.13 -> nodes_cp313.pyd
+仅支持 Windows。
 """
-from .nodes import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS
+import sys
+
+_VER = sys.version_info[:2]
+
+if _VER == (3, 12):
+    from .nodes_cp312 import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS
+elif _VER == (3, 13):
+    from .nodes_cp313 import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS
+else:
+    raise RuntimeError(
+        "wenjiezxTool 仅支持 Python 3.12 / 3.13 的 Windows 版 ComfyUI，"
+        "当前运行 Python %d.%d，请使用对应版本的 ComfyUI" % _VER
+    )
 
 WEB_DIRECTORY = "web"
 
