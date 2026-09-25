@@ -18,9 +18,29 @@
       "flags": {},
       "order": 0,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "localized_name": "UNet名称",
+          "name": "unet_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "unet_name"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "数据类型",
+          "name": "weight_dtype",
+          "type": "COMBO",
+          "widget": {
+            "name": "weight_dtype"
+          },
+          "link": null
+        }
+      ],
       "outputs": [
         {
+          "localized_name": "模型",
           "name": "MODEL",
           "type": "MODEL",
           "links": [
@@ -66,13 +86,33 @@
       "mode": 0,
       "inputs": [
         {
+          "localized_name": "model",
           "name": "model",
           "type": "MODEL",
           "link": 1
+        },
+        {
+          "localized_name": "device",
+          "name": "device",
+          "type": "COMBO",
+          "widget": {
+            "name": "device"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "dtype",
+          "name": "dtype",
+          "type": "COMBO",
+          "widget": {
+            "name": "dtype"
+          },
+          "link": null
         }
       ],
       "outputs": [
         {
+          "localized_name": "模型",
           "name": "MODEL",
           "type": "MODEL",
           "links": [
@@ -118,13 +158,51 @@
       "mode": 0,
       "inputs": [
         {
+          "localized_name": "model",
           "name": "model",
           "type": "MODEL",
           "link": 2
+        },
+        {
+          "localized_name": "复用阈值",
+          "name": "复用阈值",
+          "type": "FLOAT",
+          "widget": {
+            "name": "复用阈值"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "起始比例",
+          "name": "起始比例",
+          "type": "FLOAT",
+          "widget": {
+            "name": "起始比例"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "结束比例",
+          "name": "结束比例",
+          "type": "FLOAT",
+          "widget": {
+            "name": "结束比例"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "详细日志",
+          "name": "详细日志",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "详细日志"
+          },
+          "link": null
         }
       ],
       "outputs": [
         {
+          "localized_name": "模型",
           "name": "模型",
           "type": "MODEL",
           "links": [
@@ -132,6 +210,7 @@
           ]
         },
         {
+          "localized_name": "加速统计",
           "name": "加速统计",
           "type": "STRING",
           "links": []
@@ -177,9 +256,39 @@
       "flags": {},
       "order": 3,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "localized_name": "CLIP名称",
+          "name": "clip_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "clip_name"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "类型",
+          "name": "type",
+          "type": "COMBO",
+          "widget": {
+            "name": "type"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "设备",
+          "name": "device",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "device"
+          },
+          "link": null
+        }
+      ],
       "outputs": [
         {
+          "localized_name": "CLIP",
           "name": "CLIP",
           "type": "CLIP",
           "links": [
@@ -227,9 +336,20 @@
       "flags": {},
       "order": 4,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "localized_name": "vae名称",
+          "name": "vae_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "vae_name"
+          },
+          "link": null
+        }
+      ],
       "outputs": [
         {
+          "localized_name": "VAE",
           "name": "VAE",
           "type": "VAE",
           "links": [
@@ -271,9 +391,56 @@
       "flags": {},
       "order": 5,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "localized_name": "模式",
+          "name": "模式",
+          "type": "COMBO",
+          "widget": {
+            "name": "模式"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "提示词",
+          "name": "提示词",
+          "type": "STRING",
+          "widget": {
+            "name": "提示词"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "画面比例",
+          "name": "画面比例",
+          "type": "COMBO",
+          "widget": {
+            "name": "画面比例"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "图片大小",
+          "name": "图片大小",
+          "type": "COMBO",
+          "widget": {
+            "name": "图片大小"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "一次出几张",
+          "name": "一次出几张",
+          "type": "INT",
+          "widget": {
+            "name": "一次出几张"
+          },
+          "link": null
+        }
+      ],
       "outputs": [
         {
+          "localized_name": "布尔值",
           "name": "布尔值",
           "type": "BOOLEAN",
           "links": [
@@ -283,6 +450,7 @@
           ]
         },
         {
+          "localized_name": "提示词",
           "name": "提示词",
           "type": "STRING",
           "links": [
@@ -291,16 +459,19 @@
           ]
         },
         {
+          "localized_name": "宽度",
           "name": "宽度",
           "type": "INT",
           "links": []
         },
         {
+          "localized_name": "高度",
           "name": "高度",
           "type": "INT",
           "links": []
         },
         {
+          "localized_name": "图像Latent",
           "name": "图像Latent",
           "type": "LATENT",
           "links": [
@@ -308,6 +479,7 @@
           ]
         },
         {
+          "localized_name": "编辑分辨率",
           "name": "编辑分辨率",
           "type": "INT",
           "links": [
@@ -354,29 +526,51 @@
       "mode": 0,
       "inputs": [
         {
+          "localized_name": "clip",
           "name": "clip",
           "type": "CLIP",
           "link": 4
         },
         {
+          "localized_name": "image_1",
           "name": "images.image_1",
           "shape": 7,
           "type": "IMAGE",
           "link": null
         },
         {
+          "localized_name": "vae",
           "name": "vae",
           "shape": 7,
           "type": "VAE",
           "link": null
         },
         {
+          "localized_name": "prompt",
           "name": "prompt",
           "type": "STRING",
           "widget": {
             "name": "prompt"
           },
           "link": 26
+        },
+        {
+          "localized_name": "negative_prompt",
+          "name": "negative_prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "negative_prompt"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "resolution",
+          "name": "resolution",
+          "type": "INT",
+          "widget": {
+            "name": "resolution"
+          },
+          "link": null
         },
         {
           "name": "images.image_2",
@@ -456,6 +650,7 @@
       ],
       "outputs": [
         {
+          "localized_name": "positive",
           "name": "positive",
           "type": "CONDITIONING",
           "links": [
@@ -463,6 +658,7 @@
           ]
         },
         {
+          "localized_name": "negative",
           "name": "negative",
           "type": "CONDITIONING",
           "links": [
@@ -470,6 +666,7 @@
           ]
         },
         {
+          "localized_name": "latent",
           "name": "latent",
           "type": "LATENT",
           "links": []
@@ -516,23 +713,27 @@
       "mode": 0,
       "inputs": [
         {
+          "localized_name": "clip",
           "name": "clip",
           "type": "CLIP",
           "link": 5
         },
         {
+          "localized_name": "image_1",
           "name": "images.image_1",
           "shape": 7,
           "type": "IMAGE",
           "link": 31
         },
         {
+          "localized_name": "vae",
           "name": "vae",
           "shape": 7,
           "type": "VAE",
           "link": 6
         },
         {
+          "localized_name": "prompt",
           "name": "prompt",
           "type": "STRING",
           "widget": {
@@ -541,6 +742,16 @@
           "link": 27
         },
         {
+          "localized_name": "negative_prompt",
+          "name": "negative_prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "negative_prompt"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "resolution",
           "name": "resolution",
           "type": "INT",
           "widget": {
@@ -549,10 +760,11 @@
           "link": 29
         },
         {
+          "localized_name": "image_4",
           "name": "images.image_4",
           "shape": 7,
           "type": "IMAGE",
-          "link": null
+          "link": 34
         },
         {
           "name": "images.image_5",
@@ -615,20 +827,23 @@
           "link": null
         },
         {
+          "localized_name": "image_2",
           "name": "images.image_2",
           "shape": 7,
           "type": "IMAGE",
           "link": 32
         },
         {
+          "localized_name": "image_3",
           "name": "images.image_3",
           "shape": 7,
           "type": "IMAGE",
-          "link": null
+          "link": 33
         }
       ],
       "outputs": [
         {
+          "localized_name": "positive",
           "name": "positive",
           "type": "CONDITIONING",
           "links": [
@@ -636,6 +851,7 @@
           ]
         },
         {
+          "localized_name": "negative",
           "name": "negative",
           "type": "CONDITIONING",
           "links": [
@@ -643,6 +859,7 @@
           ]
         },
         {
+          "localized_name": "latent",
           "name": "latent",
           "type": "LATENT",
           "links": [
@@ -693,18 +910,21 @@
       "mode": 0,
       "inputs": [
         {
+          "localized_name": "为假时",
           "name": "on_false",
           "shape": 7,
           "type": "CONDITIONING",
           "link": 11
         },
         {
+          "localized_name": "为真时",
           "name": "on_true",
           "shape": 7,
           "type": "CONDITIONING",
           "link": 15
         },
         {
+          "localized_name": "切换",
           "name": "switch",
           "type": "BOOLEAN",
           "widget": {
@@ -715,6 +935,7 @@
       ],
       "outputs": [
         {
+          "localized_name": "输出",
           "name": "output",
           "type": "CONDITIONING",
           "links": [
@@ -759,18 +980,21 @@
       "mode": 0,
       "inputs": [
         {
+          "localized_name": "为假时",
           "name": "on_false",
           "shape": 7,
           "type": "CONDITIONING",
           "link": 12
         },
         {
+          "localized_name": "为真时",
           "name": "on_true",
           "shape": 7,
           "type": "CONDITIONING",
           "link": 16
         },
         {
+          "localized_name": "切换",
           "name": "switch",
           "type": "BOOLEAN",
           "widget": {
@@ -781,6 +1005,7 @@
       ],
       "outputs": [
         {
+          "localized_name": "输出",
           "name": "output",
           "type": "CONDITIONING",
           "links": [
@@ -825,18 +1050,21 @@
       "mode": 0,
       "inputs": [
         {
+          "localized_name": "为假时",
           "name": "on_false",
           "shape": 7,
           "type": "LATENT",
           "link": 28
         },
         {
+          "localized_name": "为真时",
           "name": "on_true",
           "shape": 7,
           "type": "LATENT",
           "link": 17
         },
         {
+          "localized_name": "切换",
           "name": "switch",
           "type": "BOOLEAN",
           "widget": {
@@ -847,6 +1075,7 @@
       ],
       "outputs": [
         {
+          "localized_name": "输出",
           "name": "output",
           "type": "LATENT",
           "links": [
@@ -889,28 +1118,87 @@
       "mode": 0,
       "inputs": [
         {
+          "localized_name": "模型",
           "name": "model",
           "type": "MODEL",
           "link": 3
         },
         {
+          "localized_name": "正面条件",
           "name": "positive",
           "type": "CONDITIONING",
           "link": 21
         },
         {
+          "localized_name": "负面条件",
           "name": "negative",
           "type": "CONDITIONING",
           "link": 22
         },
         {
+          "localized_name": "Latent图像",
           "name": "latent_image",
           "type": "LATENT",
           "link": 23
+        },
+        {
+          "localized_name": "种子",
+          "name": "seed",
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "步数",
+          "name": "steps",
+          "type": "INT",
+          "widget": {
+            "name": "steps"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "cfg",
+          "name": "cfg",
+          "type": "FLOAT",
+          "widget": {
+            "name": "cfg"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "采样器名称",
+          "name": "sampler_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "sampler_name"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "调度器",
+          "name": "scheduler",
+          "type": "COMBO",
+          "widget": {
+            "name": "scheduler"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "降噪",
+          "name": "denoise",
+          "type": "FLOAT",
+          "widget": {
+            "name": "denoise"
+          },
+          "link": null
         }
       ],
       "outputs": [
         {
+          "localized_name": "Latent",
           "name": "LATENT",
           "type": "LATENT",
           "links": [
@@ -970,11 +1258,13 @@
       "mode": 0,
       "inputs": [
         {
+          "localized_name": "Latent",
           "name": "samples",
           "type": "LATENT",
           "link": 24
         },
         {
+          "localized_name": "vae",
           "name": "vae",
           "type": "VAE",
           "link": 7
@@ -982,6 +1272,7 @@
       ],
       "outputs": [
         {
+          "localized_name": "图像",
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
@@ -1016,13 +1307,24 @@
       "mode": 0,
       "inputs": [
         {
+          "localized_name": "图片",
           "name": "images",
           "type": "IMAGE",
           "link": 25
+        },
+        {
+          "localized_name": "文件名前缀",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
         }
       ],
       "outputs": [
         {
+          "localized_name": "images",
           "name": "images",
           "type": "IMAGE",
           "links": []
@@ -1075,7 +1377,7 @@
         "**Qwen-Image-2.1 文生图 / 图片编辑 二合一**（含残差缓存加速）\n\n1. 左上角「模式·画布三合一」：下拉切文生图/图片编辑，下方一个文本框输入当前模式的提示词（文生图=画面描述；图片编辑=编辑指令，用 <image1>/<image2>…引用参考图），再选画布宽高比/分辨率。\n2. 文生图：不用放图，直接写提示词出图。\n3. 图片编辑：在「图片批量导入器」里拖入/导入多张图片并可拖动排序，「图片批量路由」按顺序分出多路（点按钮加/减路数）接到下方编码器的 image_1/image_2…图片口；第 1 张=要改的图，其余=素材图。\n4. 一次只采样一个分支，省显存；输出在 ComfyUI/output/wenjiezx/。"
       ],
       "widgets_values_named": {
-        "text": "**Qwen-Image-2.1 文生图 / 图片编辑 二合一**（含残差缓存加速）\n\n1. 左上角「模式·画布三合一」：下拉切文生图/图片编辑，下方一个文本框输入当前模式的提示词（文生图=画面描述；图片编辑=编辑指令，用 <image1>/<image2> 引用参考图），再选画布宽高比/分辨率。\n2. 图片编辑：改两张「加载图像」里的图（第1张=要改的图，第2张=素材图）。\n3. 一次只采样一个分支，省显存；分辨率默认 1024（16GB 显存实测 12 秒/张）。\n4. 输出在 ComfyUI/output/wenjiezx/。"
+        "text": "**Qwen-Image-2.1 文生图 / 图片编辑 二合一**（自研残差缓存加速，无第三方插件）\n\n1. 左上角「模式·画布三合一」：下拉切文生图/图片编辑，下方一个文本框输入当前模式的提示词（文生图=画面描述；图片编辑=编辑指令，用 <image1>/<image2> 引用参考图），再选画布宽高比/分辨率。\n2. 图片编辑：改两张「加载图像」里的图（第1张=要改的图，第2张=素材图）。\n3. 一次只采样一个分支，省显存；分辨率默认 1024（16GB 显存实测 12 秒/张）。\n4. 输出在 ComfyUI/output/wenjiezx/。"
       },
       "color": "#432",
       "bgcolor": "#653"
@@ -1166,13 +1468,29 @@
             32
           ],
           "slot_index": 1
+        },
+        {
+          "name": "第3张",
+          "type": "IMAGE",
+          "links": [
+            33
+          ],
+          "slot_index": 2
+        },
+        {
+          "name": "第4张",
+          "type": "IMAGE",
+          "links": [
+            34
+          ],
+          "slot_index": 3
         }
       ],
       "properties": {
         "Node name for S&R": "WJZ_ImageBatchRouter"
       },
       "widgets_values": [
-        2
+        4
       ]
     }
   ],
@@ -1366,7 +1684,7 @@
       6,
       5,
       12,
-      4,
+      5,
       "INT"
     ],
     [
@@ -1391,6 +1709,22 @@
       1,
       12,
       1,
+      "IMAGE"
+    ],
+    [
+      33,
+      21,
+      2,
+      12,
+      2,
+      "IMAGE"
+    ],
+    [
+      34,
+      21,
+      3,
+      12,
+      3,
       "IMAGE"
     ]
   ],
@@ -1447,19 +1781,14 @@
   "config": {},
   "extra": {
     "ds": {
-      "scale": 0.6010518407212623,
+      "scale": 0.6611570247933886,
       "offset": [
-        1259.529753752157,
-        821.0942936028952
+        1005.2785037521568,
+        711.7707936028952
       ]
     },
     "ue_links": [],
-    "links_added_by_ue": [],
-    "frontendVersion": "1.53.6",
-    "VHS_latentpreview": false,
-    "VHS_latentpreviewrate": 0,
-    "VHS_MetadataImage": true,
-    "VHS_KeepIntermediate": true
+    "links_added_by_ue": []
   },
   "version": 0.4
 }
