@@ -196,21 +196,34 @@ app.registerExtension({
 
       createImporterUI(node, "图片列表");
 
-      // 三合一节点：加宽保证右侧输出口标签完整显示；提示词框默认收起成一行并标注作用；输出口加中文说明
+      // 三合一节点：加宽保证右侧输出口标签完整显示；提示词框默认收起成一行并在上方标注作用；输出口加中文说明
       if (nodeData.name === "WJZ_ModeLatentCanvas") {
         const pw = node.widgets.find((w) => w.name === "提示词");
         if (pw) {
           try {
-            // 标注输入框作用（显示名+悬停说明）
-            pw.label = "提示词（画面描述 / 编辑指令）";
-            pw.tooltip = "文生图：输入画面描述；图片编辑：输入编辑指令（如：把图中衣服换成蓝色）";
+            // 新版前端 widget 的 label 不渲染，用 DOM 说明条插在提示词框上方，注明输入什么
+            const lbl = document.createElement("div");
+            lbl.style.cssText =
+              "width:100%;box-sizing:border-box;padding:2px 6px;font-size:11px;line-height:1.5;color:#ffd966;background:rgba(255,217,102,.08);border-top:1px solid #3a3a3a;";
+            lbl.textContent = "提示词（画面描述 / 编辑指令）";
+            const dwl = node.addDOMWidget("提示词说明", "wjzpromptbar", lbl, {
+              getValue: () => "",
+              setValue: () => {},
+              getMinHeight: () => 22,
+              getMaxHeight: () => 22,
+            });
+            dwl.serialize = false;
+            const dwIdx = node.widgets.indexOf(dwl);
+            if (dwIdx > -1) node.widgets.splice(dwIdx, 1);
+            const pwIdx = node.widgets.indexOf(pw);
+            if (pwIdx > -1) node.widgets.splice(pwIdx, 0, dwl);
             // height 在新版前端是只读 getter，不能用赋值；改为调低 textarea 行数实现收起
             const ta = pw.inputEl || pw.el;
             if (ta && ta.tagName === "TEXTAREA") {
               ta.rows = 1;
               ta.style.height = "auto";
             }
-          } catch (e) { /* 收起失败不影响使用 */ }
+          } catch (e) { /* 标注失败不影响使用 */ }
         }
         try {
           // 输出口中文说明（鼠标悬停端口可看）：这些是自动计算的结果，不用填
