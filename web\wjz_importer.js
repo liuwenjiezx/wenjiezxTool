@@ -190,7 +190,7 @@ app.registerExtension({
 
       createImporterUI(node, "图片列表");
 
-      // 三合一节点：提示词框默认收起成一行高度（需要时往下拖可放大），避免挡后面的内容
+      // 三合一节点：加宽保证右侧输出口标签完整显示；提示词框默认收起成一行；输出口加中文说明
       if (nodeData.name === "WJZ_ModeLatentCanvas") {
         const pw = node.widgets.find((w) => w.name === "提示词");
         if (pw) {
@@ -202,13 +202,32 @@ app.registerExtension({
               ta.style.height = "auto";
             }
           } catch (e) { /* 收起失败不影响使用 */ }
-          setTimeout(() => {
-            try {
-              node.setSize([node.size[0], node.computeSize()[1]]);
-              node.setDirtyCanvas(true, true);
-            } catch (e2) { /* 忽略 */ }
-          }, 80);
         }
+        try {
+          // 输出口中文说明（鼠标悬停端口可看）：这些是自动计算的结果，不用填
+          const tips = {
+            "宽度": "本次出图宽度（像素），由画面比例×图片大小自动计算",
+            "高度": "本次出图高度（像素），由画面比例×图片大小自动计算",
+            "图像Latent": "出图画布，自动送给采样器（文生图按比例，编辑按首图尺寸）",
+            "编辑分辨率": "图片编辑时的参考分辨率（文生图模式不影响）",
+            "图片批量": "图片区里的全部图片，按顺序送给「模式图片开关」",
+            "图片编辑": "是否为图片编辑模式（布尔值），送给「模式图片开关」",
+          };
+          node.outputs.forEach((o) => {
+            if (tips[o.name]) o.tooltip = tips[o.name];
+          });
+          // 节点默认加宽，右侧端口标签不被挤压
+          if (node.size[0] < 360) {
+            node.size[0] = 360;
+            node.setSize([360, node.size[1] || node.computeSize()[1]]);
+          }
+        } catch (e3) { /* 忽略 */ }
+        setTimeout(() => {
+          try {
+            node.setSize([node.size[0], node.computeSize()[1]]);
+            node.setDirtyCanvas(true, true);
+          } catch (e2) { /* 忽略 */ }
+        }, 80);
       }
       return r;
     };
