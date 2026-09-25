@@ -485,6 +485,14 @@
           "links": [
             29
           ]
+        },
+        {
+          "name": "图片批量",
+          "type": "IMAGE",
+          "links": [
+            35
+          ],
+          "slot_index": 6
         }
       ],
       "properties": {
@@ -497,10 +505,11 @@
       },
       "widgets_values": [
         "图片编辑",
-        "图1男人的服装换成图2的黑色西服。保持图1人物的镜头镜别不变",
         "16:9 横屏（宽屏壁纸）",
         "高清 约1024（推荐）",
-        1
+        1,
+        "图1男人的服装换成图2的黑色西服。保持图1人物的镜头镜别不变",
+        "[]"
       ],
       "widgets_values_named": {
         "模式": "图片编辑",
@@ -1383,47 +1392,6 @@
       "bgcolor": "#653"
     },
     {
-      "id": 20,
-      "type": "WJZ_ImageBatchImporter",
-      "pos": [
-        80,
-        260
-      ],
-      "size": [
-        300,
-        400
-      ],
-      "flags": {},
-      "order": 15,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "图片列表",
-          "type": "STRING",
-          "widget": {
-            "name": "图片列表"
-          },
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "name": "图片批量",
-          "type": "IMAGE",
-          "links": [
-            30
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "WJZ_ImageBatchImporter"
-      },
-      "widgets_values": [
-        "[]"
-      ]
-    },
-    {
       "id": 21,
       "type": "WJZ_ImageBatchRouter",
       "pos": [
@@ -1441,7 +1409,7 @@
         {
           "name": "图片批量",
           "type": "IMAGE",
-          "link": 30
+          "link": 35
         },
         {
           "name": "输出路数",
@@ -1688,14 +1656,6 @@
       "INT"
     ],
     [
-      30,
-      20,
-      0,
-      21,
-      0,
-      "IMAGE"
-    ],
-    [
       31,
       21,
       0,
@@ -1725,6 +1685,14 @@
       3,
       12,
       3,
+      "IMAGE"
+    ],
+    [
+      35,
+      6,
+      6,
+      21,
+      0,
       "IMAGE"
     ]
   ],
