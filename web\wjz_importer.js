@@ -189,6 +189,18 @@ app.registerExtension({
       if (wi >= 0) node.widgets.splice(wi, 1);
 
       createImporterUI(node, "图片列表");
+
+      // 三合一节点：提示词框默认收起成一行高度（需要时往下拖可放大），避免挡后面的内容
+      if (nodeData.name === "WJZ_ModeLatentCanvas") {
+        const pw = node.widgets.find((w) => w.name === "提示词");
+        if (pw) {
+          pw.height = 42;
+          setTimeout(() => {
+            node.setSize([node.size[0], node.computeSize()[1]]);
+            node.setDirtyCanvas(true, true);
+          }, 80);
+        }
+      }
       return r;
     };
   },
