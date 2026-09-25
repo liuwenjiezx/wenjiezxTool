@@ -193,6 +193,7 @@ app.registerExtension({
       // 三合一节点：加宽保证右侧输出口标签完整显示；提示词框默认收起成一行；输出口加中文说明
       if (nodeData.name === "WJZ_ModeLatentCanvas") {
         const pw = node.widgets.find((w) => w.name === "提示词");
+        const mw = node.widgets.find((w) => w.name === "模式");
         if (pw) {
           try {
             // height 在新版前端是只读 getter，不能用赋值；改为调低 textarea 行数实现收起
@@ -203,6 +204,44 @@ app.registerExtension({
             }
           } catch (e) { /* 收起失败不影响使用 */ }
         }
+        try {
+          // 顶部模式说明条：当前模式怎么用，随模式切换自动更新
+          const tipDiv = document.createElement("div");
+          tipDiv.style.cssText =
+            "width:100%;box-sizing:border-box;padding:4px 6px;font-size:11px;line-height:1.5;color:#ffd966;background:rgba(255,217,102,.08);border-bottom:1px solid #444;";
+          function updateTip() {
+            const isEdit = String(mw?.value ?? "").includes("图片编辑");
+            tipDiv.textContent = isEdit
+              ? "【图片编辑】下方导入/拖入图片，第1张=要改的图，其余=素材图"
+              : "【文生图】不用放图，直接写画面描述即可出图";
+            try {
+              const ta = pw?.inputEl || pw?.el;
+              if (ta && ta.tagName === "TEXTAREA") {
+                ta.placeholder = isEdit
+                  ? "输入编辑指令，如：把图中衣服换成蓝色…"
+                  : "输入画面描述，如：一只柴犬坐在咖啡馆窗边…";
+              }
+            } catch (e4) { /* 忽略 */ }
+          }
+          const dw2 = node.addDOMWidget("模式说明", "wjzmodebar", tipDiv, {
+            getValue: () => "",
+            setValue: () => {},
+            getMinHeight: () => 26,
+            getMaxHeight: () => 26,
+          });
+          dw2.serialize = false;
+          const dwIdx = node.widgets.indexOf(dw2);
+          if (dwIdx > 0) node.widgets.splice(dwIdx, 1);
+          node.widgets.unshift(dw2);
+          updateTip();
+          if (mw) {
+            const prevCb = mw.callback;
+            mw.callback = function (...a) {
+              prevCb?.apply(this, a);
+              updateTip();
+            };
+          }
+        } catch (e5) { /* 忽略 */ }
         try {
           // 输出口中文说明（鼠标悬停端口可看）：这些是自动计算的结果，不用填
           const tips = {
