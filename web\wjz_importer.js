@@ -194,10 +194,19 @@ app.registerExtension({
       if (nodeData.name === "WJZ_ModeLatentCanvas") {
         const pw = node.widgets.find((w) => w.name === "提示词");
         if (pw) {
-          pw.height = 42;
+          try {
+            // height 在新版前端是只读 getter，不能用赋值；改为调低 textarea 行数实现收起
+            const ta = pw.inputEl || pw.el;
+            if (ta && ta.tagName === "TEXTAREA") {
+              ta.rows = 1;
+              ta.style.height = "auto";
+            }
+          } catch (e) { /* 收起失败不影响使用 */ }
           setTimeout(() => {
-            node.setSize([node.size[0], node.computeSize()[1]]);
-            node.setDirtyCanvas(true, true);
+            try {
+              node.setSize([node.size[0], node.computeSize()[1]]);
+              node.setDirtyCanvas(true, true);
+            } catch (e2) { /* 忽略 */ }
           }, 80);
         }
       }
