@@ -1,5 +1,4 @@
 import { app } from "../../scripts/app.js";
-import { ComfyWidgets } from "../../scripts/widgets.js";
 
 const ROUTER_MAX = 16;
 const PLACEHOLDER = "（不选·自动占位）";
@@ -89,8 +88,8 @@ app.registerExtension({
       }
 
       function thumbUrl(name) {
-        const p = new URLSearchParams({ filename: name, type: "input" });
-        return app.api.apiURL + "/view?" + p.toString();
+        const params = new URLSearchParams({ filename: name, type: "input", subfolder: "" });
+        return "/view?" + params.toString();
       }
 
       function render() {
@@ -102,6 +101,13 @@ app.registerExtension({
             "position:relative;width:64px;height:64px;border:1px solid #555;border-radius:4px;overflow:hidden;cursor:grab;background:#1a1a1a;flex:0 0 auto;";
           const img = document.createElement("img");
           img.src = thumbUrl(name);
+          img.onerror = () => {
+            img.remove();
+            const sp = document.createElement("span");
+            sp.textContent = name.split("/").pop();
+            sp.style.cssText = "font-size:9px;color:#aaa;word-break:break-all;padding:3px;line-height:1.3;";
+            box.appendChild(sp);
+          };
           img.style.cssText =
             "width:100%;height:100%;object-fit:cover;pointer-events:none;display:block;";
           const del = document.createElement("span");
@@ -147,14 +153,12 @@ app.registerExtension({
 
       function commit() {
         const w = node.widgets.find((x) => x.name === "图片列表");
-        if (w) {
-          w.value = JSON.stringify(files);
-          w.callback?.(w.value);
-        }
+        if (w) w.callback?.(w.value);
         node.setDirtyCanvas(true, true);
       }
 
-      const dw = ComfyWidgets.addDOMWidget(node, "图片列表", "wjzimglist", div, {
+      // 用内核自带的 addDOMWidget 创建 DOM 组件（新版前端原生支持）
+      const dw = node.addDOMWidget("图片列表", "wjzimglist", div, {
         getValue() {
           return JSON.stringify(files);
         },
@@ -172,9 +176,9 @@ app.registerExtension({
         getMaxHeight: () => 640,
       });
       // 初次创建/加载后恢复已保存列表
-      if (dw && dw.widget && dw.widget.value) {
+      if (dw && dw.value) {
         try {
-          const arr = JSON.parse(dw.widget.value || "[]");
+          const arr = JSON.parse(dw.value || "[]");
           files.length = 0;
           if (Array.isArray(arr)) files.push(...arr);
           render();
