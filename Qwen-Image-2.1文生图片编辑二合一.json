@@ -2,14 +2,14 @@
   "id": "c5791f18-d9b7-4d9b-be3e-fff0d41e21ba",
   "revision": 0,
   "last_node_id": 22,
-  "last_link_id": 29,
+  "last_link_id": 35,
   "nodes": [
     {
       "id": 1,
       "type": "UNETLoader",
       "pos": [
-        -730.3738571352684,
-        -448.90095231623707
+        -714.6437832827295,
+        -550.5409823188313
       ],
       "size": [
         260,
@@ -49,9 +49,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "UNETLoader",
         "cnr_id": "comfy-core",
         "ver": "0.37.0",
-        "Node name for S&R": "UNETLoader",
         "ue_properties": {
           "widget_ue_connectable": {
             "unet_name": true,
@@ -71,97 +71,25 @@
       }
     },
     {
-      "id": 2,
-      "type": "QwenImage21Cache",
-      "pos": [
-        -434.50612637193524,
-        -445.2645886798732
-      ],
-      "size": [
-        260,
-        82
-      ],
-      "flags": {},
-      "order": 1,
-      "mode": 0,
-      "inputs": [
-        {
-          "localized_name": "model",
-          "name": "model",
-          "type": "MODEL",
-          "link": 1
-        },
-        {
-          "localized_name": "device",
-          "name": "device",
-          "type": "COMBO",
-          "widget": {
-            "name": "device"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "dtype",
-          "name": "dtype",
-          "type": "COMBO",
-          "widget": {
-            "name": "dtype"
-          },
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "localized_name": "模型",
-          "name": "MODEL",
-          "type": "MODEL",
-          "links": [
-            2
-          ]
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.37.0",
-        "Node name for S&R": "QwenImage21Cache",
-        "ue_properties": {
-          "widget_ue_connectable": {
-            "device": true,
-            "dtype": true
-          },
-          "version": "7.8",
-          "input_ue_unconnectable": {}
-        }
-      },
-      "widgets_values": [
-        "auto",
-        "default"
-      ],
-      "widgets_values_named": {
-        "device": "auto",
-        "dtype": "default"
-      }
-    },
-    {
       "id": 3,
       "type": "WJZ_TeaCache",
       "pos": [
-        -438.82643000670436,
-        -309.98135087265433
+        -417.156479521475,
+        -311.74133073105264
       ],
       "size": [
         300,
         150
       ],
       "flags": {},
-      "order": 2,
+      "order": 8,
       "mode": 0,
       "inputs": [
         {
           "localized_name": "model",
           "name": "model",
           "type": "MODEL",
-          "link": 2
+          "link": 36
         },
         {
           "localized_name": "复用阈值",
@@ -243,153 +171,18 @@
       }
     },
     {
-      "id": 4,
-      "type": "CLIPLoader",
-      "pos": [
-        -728.4880368694274,
-        -310.8801544700966
-      ],
-      "size": [
-        260,
-        106
-      ],
-      "flags": {},
-      "order": 3,
-      "mode": 0,
-      "inputs": [
-        {
-          "localized_name": "CLIP名称",
-          "name": "clip_name",
-          "type": "COMBO",
-          "widget": {
-            "name": "clip_name"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "类型",
-          "name": "type",
-          "type": "COMBO",
-          "widget": {
-            "name": "type"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "设备",
-          "name": "device",
-          "shape": 7,
-          "type": "COMBO",
-          "widget": {
-            "name": "device"
-          },
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "localized_name": "CLIP",
-          "name": "CLIP",
-          "type": "CLIP",
-          "links": [
-            4,
-            5
-          ]
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.37.0",
-        "Node name for S&R": "CLIPLoader",
-        "ue_properties": {
-          "widget_ue_connectable": {
-            "clip_name": true,
-            "type": true,
-            "device": true
-          },
-          "version": "7.8",
-          "input_ue_unconnectable": {}
-        }
-      },
-      "widgets_values": [
-        "qwen3vl_8b_int8_convrot.safetensors",
-        "qwen_image",
-        "default"
-      ],
-      "widgets_values_named": {
-        "clip_name": "qwen3vl_8b_int8_convrot.safetensors",
-        "type": "qwen_image",
-        "device": "default"
-      }
-    },
-    {
-      "id": 5,
-      "type": "VAELoader",
-      "pos": [
-        13.930013485314586,
-        -447.304790880156
-      ],
-      "size": [
-        260,
-        60
-      ],
-      "flags": {},
-      "order": 4,
-      "mode": 0,
-      "inputs": [
-        {
-          "localized_name": "vae名称",
-          "name": "vae_name",
-          "type": "COMBO",
-          "widget": {
-            "name": "vae_name"
-          },
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "localized_name": "VAE",
-          "name": "VAE",
-          "type": "VAE",
-          "links": [
-            6,
-            7
-          ]
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.37.0",
-        "Node name for S&R": "VAELoader",
-        "ue_properties": {
-          "widget_ue_connectable": {
-            "vae_name": true
-          },
-          "version": "7.8",
-          "input_ue_unconnectable": {}
-        }
-      },
-      "widgets_values": [
-        "qwen_image_2.1_vae_bf16.safetensors"
-      ],
-      "widgets_values_named": {
-        "vae_name": "qwen_image_2.1_vae_bf16.safetensors"
-      }
-    },
-    {
       "id": 6,
       "type": "WJZ_ModeLatentCanvas",
       "pos": [
-        -384.0756184673529,
-        -90.3520764247425
+        -719.5549982946799,
+        -66.32725800433242
       ],
       "size": [
         442.4869593811036,
         733.8782437133789
       ],
       "flags": {},
-      "order": 5,
+      "order": 3,
       "mode": 0,
       "inputs": [
         {
@@ -398,15 +191,6 @@
           "type": "COMBO",
           "widget": {
             "name": "模式"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "提示词",
-          "name": "提示词",
-          "type": "STRING",
-          "widget": {
-            "name": "提示词"
           },
           "link": null
         },
@@ -434,6 +218,24 @@
           "type": "INT",
           "widget": {
             "name": "一次出几张"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "提示词",
+          "name": "提示词",
+          "type": "STRING",
+          "widget": {
+            "name": "提示词"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "图片列表",
+          "name": "图片列表",
+          "type": "STRING",
+          "widget": {
+            "name": "图片列表"
           },
           "link": null
         }
@@ -487,12 +289,12 @@
           ]
         },
         {
+          "localized_name": "图片批量",
           "name": "图片批量",
           "type": "IMAGE",
           "links": [
             35
-          ],
-          "slot_index": 6
+          ]
         }
       ],
       "properties": {
@@ -508,23 +310,24 @@
         "16:9 横屏（宽屏壁纸）",
         "高清 约1024（推荐）",
         1,
-        "图1男人的服装换成图2的黑色西服。保持图1人物的镜头镜别不变",
-        "[]"
+        "三张图片放在同一个桌上面，不要出现文字",
+        "[\"8c98b81e6a4595cc4e8c2af9ad650f59.jpg\",\"6fb72bf92f371e5d2915b7df12b88913.jpg\",\"10a816f2af2ab8a3296327650898479b.jpg\"]"
       ],
       "widgets_values_named": {
         "模式": "图片编辑",
-        "提示词": "图1男人的服装换成图2的黑色西服。保持图1人物的镜头镜别不变",
-        "画面比例": "16:9 横屏（宽屏壁纸）",
-        "图片大小": "高清 约1024（推荐）",
-        "一次出几张": 1
+        "画面比例": "将图123三张图片的蛋糕放在一个桌子上面",
+        "图片大小": "16:9 横屏（宽屏壁纸）",
+        "一次出几张": "高清 约1024（推荐）",
+        "提示词": "三张图片放在同一个桌上面，不要出现文字",
+        "图片列表": "[\"8c98b81e6a4595cc4e8c2af9ad650f59.jpg\",\"6fb72bf92f371e5d2915b7df12b88913.jpg\",\"10a816f2af2ab8a3296327650898479b.jpg\"]"
       }
     },
     {
       "id": 9,
       "type": "TextEncodeQwenImage21",
       "pos": [
-        912.4478597531274,
-        -448.92581297177605
+        935.1375149548486,
+        -443.80533321408575
       ],
       "size": [
         320,
@@ -538,7 +341,7 @@
           "localized_name": "clip",
           "name": "clip",
           "type": "CLIP",
-          "link": 4
+          "link": 37
         },
         {
           "localized_name": "image_1",
@@ -682,9 +485,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "TextEncodeQwenImage21",
         "cnr_id": "comfy-core",
         "ver": "0.37.0",
-        "Node name for S&R": "TextEncodeQwenImage21",
         "ue_properties": {
           "widget_ue_connectable": {
             "prompt": true,
@@ -710,22 +513,22 @@
       "id": 12,
       "type": "TextEncodeQwenImage21",
       "pos": [
-        1380.9006722959668,
-        -445.7970433303689
+        1395.2005548032935,
+        -457.8969971725313
       ],
       "size": [
         320,
         526
       ],
       "flags": {},
-      "order": 7,
+      "order": 9,
       "mode": 0,
       "inputs": [
         {
           "localized_name": "clip",
           "name": "clip",
           "type": "CLIP",
-          "link": 5
+          "link": 38
         },
         {
           "localized_name": "image_1",
@@ -739,7 +542,7 @@
           "name": "vae",
           "shape": 7,
           "type": "VAE",
-          "link": 6
+          "link": 39
         },
         {
           "localized_name": "prompt",
@@ -767,18 +570,6 @@
             "name": "resolution"
           },
           "link": 29
-        },
-        {
-          "localized_name": "image_4",
-          "name": "images.image_4",
-          "shape": 7,
-          "type": "IMAGE",
-          "link": 34
-        },
-        {
-          "name": "images.image_5",
-          "type": "IMAGE",
-          "link": null
         },
         {
           "name": "images.image_6",
@@ -848,6 +639,20 @@
           "shape": 7,
           "type": "IMAGE",
           "link": 33
+        },
+        {
+          "localized_name": "image_4",
+          "name": "images.image_4",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 34
+        },
+        {
+          "localized_name": "image_5",
+          "name": "images.image_5",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
         }
       ],
       "outputs": [
@@ -877,9 +682,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "TextEncodeQwenImage21",
         "cnr_id": "comfy-core",
         "ver": "0.37.0",
-        "Node name for S&R": "TextEncodeQwenImage21",
         "ue_properties": {
           "widget_ue_connectable": {
             "prompt": true,
@@ -905,8 +710,8 @@
       "id": 13,
       "type": "ComfySwitchNode",
       "pos": [
-        -96.85810648610823,
-        -436.50119647144277
+        -112.58818033864732,
+        -447.3911733925242
       ],
       "size": [
         260,
@@ -915,7 +720,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 8,
+      "order": 10,
       "mode": 0,
       "inputs": [
         {
@@ -953,9 +758,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "ComfySwitchNode",
         "cnr_id": "comfy-core",
         "ver": "0.37.0",
-        "Node name for S&R": "ComfySwitchNode",
         "ue_properties": {
           "widget_ue_connectable": {
             "switch": true
@@ -985,7 +790,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 9,
+      "order": 11,
       "mode": 0,
       "inputs": [
         {
@@ -1023,9 +828,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "ComfySwitchNode",
         "cnr_id": "comfy-core",
         "ver": "0.37.0",
-        "Node name for S&R": "ComfySwitchNode",
         "ue_properties": {
           "widget_ue_connectable": {
             "switch": true
@@ -1045,8 +850,8 @@
       "id": 15,
       "type": "ComfySwitchNode",
       "pos": [
-        -97.52802533892702,
-        -290.34169204416577
+        1764.7718949338991,
+        -380.5415829438237
       ],
       "size": [
         260,
@@ -1055,7 +860,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 10,
+      "order": 12,
       "mode": 0,
       "inputs": [
         {
@@ -1093,9 +898,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "ComfySwitchNode",
         "cnr_id": "comfy-core",
         "ver": "0.37.0",
-        "Node name for S&R": "ComfySwitchNode",
         "ue_properties": {
           "widget_ue_connectable": {
             "switch": true
@@ -1123,7 +928,7 @@
         262
       ],
       "flags": {},
-      "order": 11,
+      "order": 13,
       "mode": 0,
       "inputs": [
         {
@@ -1216,9 +1021,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "KSampler",
         "cnr_id": "comfy-core",
         "ver": "0.37.0",
-        "Node name for S&R": "KSampler",
         "ue_properties": {
           "widget_ue_connectable": {
             "seed": true,
@@ -1263,7 +1068,7 @@
         60
       ],
       "flags": {},
-      "order": 12,
+      "order": 14,
       "mode": 0,
       "inputs": [
         {
@@ -1276,7 +1081,7 @@
           "localized_name": "vae",
           "name": "vae",
           "type": "VAE",
-          "link": 7
+          "link": 40
         }
       ],
       "outputs": [
@@ -1290,9 +1095,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "VAEDecode",
         "cnr_id": "comfy-core",
         "ver": "0.37.0",
-        "Node name for S&R": "VAEDecode",
         "ue_properties": {
           "widget_ue_connectable": {},
           "version": "7.8",
@@ -1304,15 +1109,15 @@
       "id": 18,
       "type": "SaveImage",
       "pos": [
-        119.95778860281933,
-        -32.051493740685075
+        110.86690725516308,
+        -36.5969344145132
       ],
       "size": [
         651.4189187622071,
         655.99
       ],
       "flags": {},
-      "order": 13,
+      "order": 15,
       "mode": 0,
       "inputs": [
         {
@@ -1362,15 +1167,15 @@
       "id": 19,
       "type": "MarkdownNote",
       "pos": [
-        874.5752901919789,
-        191.1972863350513
+        1329.9753405459821,
+        229.6972611580493
       ],
       "size": [
         500,
         340
       ],
       "flags": {},
-      "order": 14,
+      "order": 4,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -1386,7 +1191,7 @@
         "**Qwen-Image-2.1 文生图 / 图片编辑 二合一**（含残差缓存加速）\n\n1. 左上角「模式·画布三合一」：下拉切文生图/图片编辑，下方一个文本框输入当前模式的提示词（文生图=画面描述；图片编辑=编辑指令，用 <image1>/<image2>…引用参考图），再选画布宽高比/分辨率。\n2. 文生图：不用放图，直接写提示词出图。\n3. 图片编辑：在「图片批量导入器」里拖入/导入多张图片并可拖动排序，「图片批量路由」按顺序分出多路（点按钮加/减路数）接到下方编码器的 image_1/image_2…图片口；第 1 张=要改的图，其余=素材图。\n4. 一次只采样一个分支，省显存；输出在 ComfyUI/output/wenjiezx/。"
       ],
       "widgets_values_named": {
-        "text": "**Qwen-Image-2.1 文生图 / 图片编辑 二合一**（自研残差缓存加速，无第三方插件）\n\n1. 左上角「模式·画布三合一」：下拉切文生图/图片编辑，下方一个文本框输入当前模式的提示词（文生图=画面描述；图片编辑=编辑指令，用 <image1>/<image2> 引用参考图），再选画布宽高比/分辨率。\n2. 图片编辑：改两张「加载图像」里的图（第1张=要改的图，第2张=素材图）。\n3. 一次只采样一个分支，省显存；分辨率默认 1024（16GB 显存实测 12 秒/张）。\n4. 输出在 ComfyUI/output/wenjiezx/。"
+        "text": "**Qwen-Image-2.1 文生图 / 图片编辑 二合一**（含残差缓存加速）\n\n1. 左上角「模式·画布三合一」：下拉切文生图/图片编辑，下方一个文本框输入当前模式的提示词（文生图=画面描述；图片编辑=编辑指令，用 <image1>/<image2>…引用参考图），再选画布宽高比/分辨率。\n2. 文生图：不用放图，直接写提示词出图。\n3. 图片编辑：在「图片批量导入器」里拖入/导入多张图片并可拖动排序，「图片批量路由」按顺序分出多路（点按钮加/减路数）接到下方编码器的 image_1/image_2…图片口；第 1 张=要改的图，其余=素材图。\n4. 一次只采样一个分支，省显存；输出在 ComfyUI/output/wenjiezx/。"
       },
       "color": "#432",
       "bgcolor": "#653"
@@ -1395,23 +1200,25 @@
       "id": 21,
       "type": "WJZ_ImageBatchRouter",
       "pos": [
-        430,
-        300
+        881.0001930236818,
+        158.09982376098642
       ],
       "size": [
-        260,
-        260
+        401.8999916076657,
+        166
       ],
       "flags": {},
-      "order": 16,
+      "order": 7,
       "mode": 0,
       "inputs": [
         {
+          "localized_name": "图片批量",
           "name": "图片批量",
           "type": "IMAGE",
           "link": 35
         },
         {
+          "localized_name": "输出路数",
           "name": "输出路数",
           "type": "INT",
           "widget": {
@@ -1422,36 +1229,38 @@
       ],
       "outputs": [
         {
+          "localized_name": "第1张",
           "name": "第1张",
           "type": "IMAGE",
+          "slot_index": 0,
           "links": [
             31
-          ],
-          "slot_index": 0
+          ]
         },
         {
+          "localized_name": "第2张",
           "name": "第2张",
           "type": "IMAGE",
+          "slot_index": 1,
           "links": [
             32
-          ],
-          "slot_index": 1
+          ]
         },
         {
+          "localized_name": "第3张",
           "name": "第3张",
           "type": "IMAGE",
           "links": [
             33
-          ],
-          "slot_index": 2
+          ]
         },
         {
+          "localized_name": "第4张",
           "name": "第4张",
           "type": "IMAGE",
           "links": [
             34
-          ],
-          "slot_index": 3
+          ]
         }
       ],
       "properties": {
@@ -1459,6 +1268,64 @@
       },
       "widgets_values": [
         4
+      ],
+      "widgets_values_named": {
+        "输出路数": 4
+      }
+    },
+    {
+      "id": 22,
+      "type": "WJZ_UniversalModelLoader",
+      "pos": [
+        200,
+        200
+      ],
+      "size": [
+        330,
+        250
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "模型",
+          "type": "MODEL",
+          "links": [
+            36
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            37,
+            38
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            39,
+            40
+          ],
+          "slot_index": 2
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "WJZ_UniversalModelLoader"
+      },
+      "widgets_values": [
+        "qwen_image_2.1_int8_convrot.safetensors",
+        "default",
+        "qwen3vl_8b_int8_convrot.safetensors",
+        "qwen_image",
+        "default",
+        "qwen_image_2.1_vae_bf16.safetensors"
       ]
     }
   ],
@@ -1472,36 +1339,12 @@
       "MODEL"
     ],
     [
-      2,
-      2,
-      0,
-      3,
-      0,
-      "MODEL"
-    ],
-    [
       3,
       3,
       0,
       16,
       0,
       "MODEL"
-    ],
-    [
-      4,
-      4,
-      0,
-      9,
-      0,
-      "CLIP"
-    ],
-    [
-      7,
-      5,
-      0,
-      17,
-      1,
-      "VAE"
     ],
     [
       24,
@@ -1624,20 +1467,20 @@
       "LATENT"
     ],
     [
-      5,
-      4,
+      35,
+      6,
+      6,
+      21,
       0,
-      12,
-      0,
-      "CLIP"
+      "IMAGE"
     ],
     [
-      6,
-      5,
+      31,
+      21,
       0,
       12,
-      2,
-      "VAE"
+      1,
+      "IMAGE"
     ],
     [
       27,
@@ -1656,19 +1499,11 @@
       "INT"
     ],
     [
-      31,
-      21,
-      0,
-      12,
-      0,
-      "IMAGE"
-    ],
-    [
       32,
       21,
       1,
       12,
-      1,
+      17,
       "IMAGE"
     ],
     [
@@ -1676,7 +1511,7 @@
       21,
       2,
       12,
-      2,
+      18,
       "IMAGE"
     ],
     [
@@ -1684,16 +1519,48 @@
       21,
       3,
       12,
-      3,
+      19,
       "IMAGE"
     ],
     [
-      35,
-      6,
-      6,
-      21,
+      36,
+      22,
       0,
-      "IMAGE"
+      3,
+      0,
+      "MODEL"
+    ],
+    [
+      37,
+      22,
+      1,
+      9,
+      0,
+      "CLIP"
+    ],
+    [
+      38,
+      22,
+      1,
+      12,
+      0,
+      "CLIP"
+    ],
+    [
+      39,
+      22,
+      2,
+      12,
+      2,
+      "VAE"
+    ],
+    [
+      40,
+      22,
+      2,
+      17,
+      1,
+      "VAE"
     ]
   ],
   "groups": [
@@ -1737,8 +1604,8 @@
       "id": 4,
       "title": "④ 采样与输出（两个模式共用）",
       "bounding": [
-        91.32242990414915,
-        -112.11783455966915,
+        82.2315485564929,
+        -116.66327523349727,
         710.6830406188965,
         756.0769593811035
       ],
@@ -1749,10 +1616,10 @@
   "config": {},
   "extra": {
     "ds": {
-      "scale": 0.6611570247933886,
+      "scale": 0.7272727272727284,
       "offset": [
-        1005.2785037521568,
-        711.7707936028952
+        1351.7425131806158,
+        615.2810768324557
       ]
     },
     "ue_links": [],
