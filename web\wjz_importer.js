@@ -87,8 +87,8 @@ function createImporterUI(node, widgetName) {
   note.style.cssText = "font-size:10px;color:#b0b0b0;line-height:1.4;";
   div.appendChild(note);
 
-  // 缩略图网格（100px 一格，节点宽度内一行放 4 张；带圆角更好认）
-  const THUMB = 100;
+  // 缩略图网格（150px 一格；节点默认 442px 宽放 2-3 张、拉宽后一行 4 张）
+  const THUMB = 150;
   const grid = document.createElement("div");
   grid.style.cssText =
     "display:flex;flex-wrap:wrap;gap:4px;max-height:324px;overflow:auto;";
@@ -144,7 +144,7 @@ function createImporterUI(node, widgetName) {
         box.appendChild(sp);
       };
       img.style.cssText =
-        "width:100%;height:100%;object-fit:cover;pointer-events:none;display:block;";
+        "width:100%;height:100%;object-fit:contain;pointer-events:none;display:block;"; // 原比例完整显示，不裁切
       const del = document.createElement("span");
       del.textContent = "×";
       del.style.cssText =
@@ -197,8 +197,13 @@ function createImporterUI(node, widgetName) {
         w.callback?.(w.value);
       } catch (err) {}
     }
+    // 图片变了 → 第 1 张图的原始分辨率可能变了，「出图尺寸提示条」要跟着刷新
+    node.__wjzRefreshSizeInfo?.();
     node.setDirtyCanvas(true, true);
   }
+
+  // 供外部（出图尺寸提示条）读取第 1 张参考图的文件名：空图片区返回 null
+  node.__wjzGetFirstImage = () => files[0] || null;
 
   // 用内核自带的 addDOMWidget 创建 DOM 组件（新版前端原生支持）
   const dw = node.addDOMWidget(widgetName, "wjzimglist", div, {
@@ -253,6 +258,14 @@ app.registerExtension({
     nodeType.prototype.onDrawForeground = function (ctx) {
       const r = onFore?.apply(this, arguments);
       dropNativeListWidget(this);
+      // 「本次出图 ≈ 宽×高」由画布直接绘制（__wjzDrawSizeInfo，占位行在 onNodeCreated 里留）：
+      // 新前端的 DOM 覆盖层元素普遍比画布行低一个恒定偏移（实测 ~8 屏幕px），夹在两个
+      // 画布行之间的细条文字会被下一行压住 —— 画布坐标是精确的，文字画在画布上最稳。
+      if (typeof this.__wjzDrawSizeInfo === "function") {
+        try {
+          this.__wjzDrawSizeInfo(ctx);
+        } catch (e) {}
+      }
       if (typeof this.__wjzSyncLbl === "function") {
         try {
           const mw = (this.widgets || []).find((w) => w && w.name === "模式");
@@ -282,6 +295,7 @@ app.registerExtension({
           dropNativeListWidget(node);
           node.__wjzFitPrompt?.(); // 加载工作流后前端会把 textarea 行数改回去，补一遍
           node.__wjzSyncRatio?.(); // 「画面比例」下拉也要按当前模式重刷一遍
+          node.__wjzSyncSize?.(); // 「图片大小」下拉随画面比例重刷（原图分辨率显隐 + 旧档位迁移）
           try {
             const want = node.computeSize()[1];
             if ((node.size[1] || 0) < want) node.setSize([node.size[0], want]);
@@ -426,8 +440,229 @@ app.registerExtension({
                     node.__wjzEditRatioUser = true; // 用户在编辑模式亲手选过，之后切模式不再替他默认
                   }
                 }
+                // 比例进出「参考图1比例」时，「图片大小」的可用档位要跟着变
+                // （原图分辨率只在参考图1比例下有意义），出图尺寸提示条也要刷新。
+                const nowRef = String(ratioW.value ?? "").indexOf("参考图1") >= 0;
+                if (nowRef !== !!node.__wjzWasRef) {
+                  node.__wjzJustRef = nowRef; // 刚切进参考图1比例 → 尺寸可默认「原图分辨率」
+                  node.__wjzWasRef = nowRef;
+                }
+                node.__wjzSyncSize?.();
                 return rr;
               };
+            }
+
+            // ---- 「图片大小」下拉：长边档位 + 「原图分辨率」按画面比例动态显隐 ----
+            // 后端档位语义 = 强制长边（长边像素，短边按画面比例缩放，16 像素格对齐），
+            // 不再出现「选 16:9 却显示 1024×1024」的错配。「原图分辨率（跟随第1张图）」
+            // 只在「画面比例=参考图1比例」时有意义 —— 同「参考图1比例」项一样，
+            // 后端常驻列表保证老工作流合法，显隐交给前端按当前比例增删。
+            const sizeW = node.widgets.find((w) => w && w.name === "图片大小");
+            if (sizeW && Array.isArray(sizeW.options?.values)) {
+              const S_ALL = sizeW.options.values.slice(); // 后端完整列表（含原图分辨率）
+              const S_ORIG =
+                S_ALL.find((v) => String(v).indexOf("原图分辨率") >= 0) || null;
+              const S_LIST = S_ALL.filter((v) => v !== S_ORIG); // 纯长边档位
+              const S_DEF =
+                S_LIST.find((v) => String(v).indexOf("1024") >= 0) || S_LIST[0];
+              const isRefRatio = () =>
+                String(ratioW?.value ?? "").indexOf("参考图1") >= 0;
+              // 当前图里有没有 Qwen 节点（决定编辑模式要不要提示「参考图1比例」）
+              let _qwenCache = null;
+              const isQwenGraph = () => {
+                if (_qwenCache !== null) return _qwenCache;
+                try {
+                  _qwenCache = (app.graph?._nodes || []).some((n) =>
+                    /qwen/i.test(String(n?.type || ""))
+                  );
+                } catch (e) {
+                  _qwenCache = false;
+                }
+                return _qwenCache;
+              };
+
+              // 出图尺寸提示：这个 DOM 组件只是 20px 占位行（把「图片大小」和「一次出几张」
+              // 之间撑开一行），真实文字由画布绘制 —— 见下方 __wjzDrawSizeInfo。
+              // ★不能直接把文字放进 DOM：覆盖层元素比画布行低 ~8 屏幕px，会被下一行压住。
+              const info = document.createElement("div");
+              info.style.cssText = "width:100%;height:20px;pointer-events:none;";
+              const dwi = node.addDOMWidget("出图尺寸提示", "wjzsizeinfo", info, {
+                getValue: () => "",
+                setValue: () => {},
+                getMinHeight: () => 20,
+                getMaxHeight: () => 20,
+              });
+              dwi.serialize = false;
+              const dwiIdx = node.widgets.indexOf(dwi);
+              if (dwiIdx > -1) node.widgets.splice(dwiIdx, 1);
+              const swIdx = node.widgets.indexOf(sizeW);
+              if (swIdx > -1) node.widgets.splice(swIdx + 1, 0, dwi);
+
+              // 第 1 张参考图的原始尺寸（异步加载，按文件名缓存）
+              const dimsCache = { name: null, w: 0, h: 0 };
+              const loadDims = (name) => {
+                const img = new Image();
+                img.onload = () => {
+                  if (node.__wjzGetFirstImage?.() === name) {
+                    dimsCache.name = name;
+                    dimsCache.w = img.naturalWidth;
+                    dimsCache.h = img.naturalHeight;
+                    refreshSizeInfo();
+                  }
+                };
+                img.onerror = () => {
+                  if (dimsCache.name === name) {
+                    dimsCache.name = null;
+                    dimsCache.w = dimsCache.h = 0;
+                  }
+                };
+                const p = new URLSearchParams({ filename: name, type: "input", subfolder: "" });
+                img.src = "/view?" + p.toString();
+              };
+              const snap16 = (x) => Math.max(64, Math.round(x / 16) * 16);
+              const calcWH = () => {
+                // 比例：参考图1比例 → 第 1 张图实际宽高比（没图回退 16:9）；否则解析「16:9」字样
+                let rw = 16, rh = 9, refName = node.__wjzGetFirstImage?.() || null;
+                if (refName && dimsCache.name !== refName) loadDims(refName);
+                if (isRefRatio()) {
+                  if (refName && dimsCache.name === refName && dimsCache.w > 0) {
+                    rw = dimsCache.w; rh = dimsCache.h;
+                  }
+                } else {
+                  const m = String(ratioW?.value ?? "").match(/(\d+)\s*[:：]\s*(\d+)/);
+                  if (m) { rw = Number(m[1]); rh = Number(m[2]); }
+                }
+                const sv = String(sizeW?.value ?? "");
+                if (sv.indexOf("原图分辨率") >= 0 && refName && dimsCache.name === refName && dimsCache.w > 0) {
+                  return { w: snap16(dimsCache.w), h: snap16(dimsCache.h), note: "第1张图原始尺寸 " + dimsCache.w + "×" + dimsCache.h, rw, rh };
+                }
+                const m2 = sv.match(/\d{2,}/); // ★两位以上：档位最小 512，「1K」「第1张图」的个位 1 不能算档位
+                const L = m2 ? Math.max(64, Number(m2[0])) : 1024;
+                if (rw >= rh) return { w: snap16(L), h: snap16((L * rh) / rw), note: "长边 " + L, rw, rh };
+                return { w: snap16((L * rw) / rh), h: snap16(L), note: "长边 " + L, rw, rh };
+              };
+              const refreshSizeInfo = () => {
+                try {
+                  let text = "";
+                  const ref = isRefRatio();
+                  const refName = node.__wjzGetFirstImage?.() || null;
+                  if (!ref) {
+                    const c = calcWH();
+                    const m = String(ratioW?.value ?? "").match(/\d+\s*[:：]\s*\d+/);
+                    text = "本次出图 ≈ " + c.w + "×" + c.h + "（" + (m ? m[0] : "16:9") + " · " + c.note + "）";
+                    // Qwen-Image-2.1 的编辑机制要求采样画布=第 1 张参考图编码后的尺寸
+                    // （官方节点注释：any other size shifts the edit），比例不一致会错位——提醒
+                    if (isEditNow() && isQwenGraph()) {
+                      text += "｜Qwen 编辑建议选「参考图1比例」，其他比例参考图会错位";
+                    }
+                  } else if (!refName) {
+                    text = "放进第 1 张参考图后：默认按长边 1024 出图（快），要原始尺寸就选「原图分辨率」";
+                  } else {
+                    const c = calcWH();
+                    text = "本次出图 ≈ " + c.w + "×" + c.h + "（" + c.note + " · 跟随第 1 张图比例）";
+                  }
+                  node.__wjzSizeInfoText = text;
+                } catch (e) {}
+              };
+              node.__wjzRefreshSizeInfo = refreshSizeInfo;
+
+              // 画布绘制信息条文字：占位行顶端 = 图片大小行底，文字垂直居中在 20px 槽里
+              node.__wjzDrawSizeInfo = (ctx) => {
+                if (node.flags?.collapsed) return;
+                const y = sizeW.y ?? sizeW.last_y;
+                const txt = node.__wjzSizeInfoText || "";
+                if (y == null || !txt) return;
+                const slotTop = y + (sizeW.computedHeight || 24);
+                ctx.save();
+                ctx.font = "11px sans-serif";
+                ctx.fillStyle = "#9fd6ff";
+                ctx.textAlign = "left";
+                ctx.textBaseline = "top";
+                ctx.fillText(txt, 8, slotTop + 4);
+                ctx.restore();
+              };
+
+              // 换值：__wjzSizeSetting 是哨兵（程序改的，不当成用户选择）
+              const putSize = (v, auto) => {
+                node.__wjzSizeSetting = true;
+                sizeW.value = v;
+                try {
+                  sizeW.callback?.(v);
+                } finally {
+                  node.__wjzSizeSetting = false;
+                }
+                node.__wjzSizeAuto = auto;
+                refreshSizeInfo();
+              };
+
+              // 旧档位（"1024×1024（1K·推荐）" 等 1:1 基准写法）→ 同号长边档
+              // ★只认两位以上数字：「原图分辨率（跟随第1张图）」里的「第1张」「1K」
+              //   的个位 1 不能被当成档位号（误匹配会迁到 512 档，实测踩过）
+              const migrateSize = (v) => {
+                const m = String(v).match(/\d{2,}/);
+                if (!m) return null;
+                return (
+                  S_LIST.find((x) => String(x).indexOf(m[0]) >= 0) || null
+                );
+              };
+
+              const syncSize = () => {
+                const ref = isRefRatio();
+                const want = ref && S_ORIG ? S_ALL.slice() : S_LIST.slice();
+                const cur = sizeW.options.values;
+                const same =
+                  Array.isArray(cur) &&
+                  cur.length === want.length &&
+                  cur.every((x, i) => x === want[i]);
+                if (!same) sizeW.options.values = want;
+
+                if (want.indexOf(sizeW.value) < 0) {
+                  // 当前值在这个比例下不存在（含老工作流的旧档位）：迁移/回默认
+                  const mv = migrateSize(sizeW.value);
+                  putSize(mv || (ref && S_ORIG ? S_ORIG : S_DEF), true);
+                } else if (!ref && sizeW.value === S_ORIG) {
+                  // 画面比例离开了「参考图1比例」→ 原图分辨率没了参照物，回默认长边档
+                  putSize(S_DEF, true);
+                } else if (ref && S_ORIG && node.__wjzJustRef) {
+                  // 刚切进「参考图1比例」→ 默认「长边 1024」：
+                  // 原图分辨率常比 1K 大很多（出图慢），用户 2026-09-26 定的口径——
+                  // 图片编辑默认按长边 1024 提速。用户在参考图1比例下亲手选过
+                  // 「原图分辨率」等档位的话，切走再切回要还原他的选择。
+                  const kept =
+                    node.__wjzSizeUserRef && node.__wjzEditSize &&
+                    want.indexOf(node.__wjzEditSize) >= 0
+                      ? node.__wjzEditSize
+                      : S_DEF;
+                  if (sizeW.value !== kept) putSize(kept, true);
+                }
+                node.__wjzJustRef = false;
+                if (ref) node.__wjzEditSize = sizeW.value;
+                refreshSizeInfo();
+                node.setDirtyCanvas?.(true, true);
+              };
+              node.__wjzSyncSize = syncSize;
+              node.__wjzWasRef = isRefRatio();
+              node.__wjzJustRef = false;
+              if (node.__wjzWasRef) node.__wjzEditSize = sizeW.value;
+              syncSize();
+              const scb = sizeW.callback;
+              sizeW.callback = function (...a) {
+                const rr = scb?.apply(this, a);
+                if (!node.__wjzSizeSetting) {
+                  node.__wjzSizeAuto = false; // 用户自己选的
+                  if (isRefRatio()) {
+                    node.__wjzEditSize = sizeW.value;
+                    node.__wjzSizeUserRef = true; // 用户在参考图1比例下亲手选过尺寸
+                  }
+                }
+                refreshSizeInfo();
+                return rr;
+              };
+              // 图片大小悬停说明
+              try {
+                sizeW.tooltip =
+                  "强制长边档位：出图长边 = 档位像素，短边按「画面比例」缩放（16 像素格对齐）。画面比例选「参考图1比例」时，可选「原图分辨率」按第 1 张图原始尺寸出图。";
+              } catch (e4) {}
             }
 
             if (modeW) {
@@ -497,11 +732,11 @@ app.registerExtension({
             rw.tooltip =
               "决定出图长宽比。选「参考图1比例」= 跟图片区第 1 张图同比例（仅图片编辑模式有这一项）";
           }
-          // 「图片大小」同样给悬停说明：写的是 1:1 基准，实际按画面比例缩放
+          // 「图片大小」同样给悬停说明：强制长边档位（新语义，v4.4）
           const sw = node.widgets.find((w) => w && w.name === "图片大小");
-          if (sw) {
+          if (sw && !sw.tooltip) {
             sw.tooltip =
-              "出图像素基准（1:1 时的边长）。实际尺寸按「画面比例」等比缩放，总像素量不变，如 1024 + 16:9 ≈ 1344×768";
+              "强制长边档位：出图长边 = 档位像素，短边按「画面比例」缩放（16 像素格对齐）。画面比例选「参考图1比例」时，可选「原图分辨率」按第 1 张图原始尺寸出图。";
           }
           // 节点默认加宽，右侧端口标签不被挤压
           if (node.size[0] < 360) {
